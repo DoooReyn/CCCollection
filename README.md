@@ -4,6 +4,6 @@
 
 ## 已完成
 
-- [x] （区别于 `cc.VideoPlayer`、层级可控的）视频播放器
+- [x] （区别于 `cc.VideoPlayer`、层级可控的）[视频播放器](./doc/video-player.md)
 
 ## 计划中
