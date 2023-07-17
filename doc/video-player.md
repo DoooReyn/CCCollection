@@ -33,3 +33,5 @@
 <video width="432" height="240" controls>
   <source src="../screenshot/video-player-record.mp4" type="video/mp4">
 </video>
+
+https://github.com/DoooReyn/CCCollection/assets/9557233/309a5b94-1ee3-45c6-8fc7-865ad496c8ab
