@@ -64,6 +64,7 @@ export class VideoPlayerCanvas extends Component {
     this.player.node.on(VideoEventType.Stop, this._onStopped, this);
     this.player.node.on(VideoEventType.Goto, this._onGoto, this);
     this.player.node.on(VideoEventType.Step, this._onStep, this);
+    this.player.node.on(VideoEventType.Ended, this._onEnded, this);
     this.player.node.on(NodeEventType.TOUCH_MOVE, this._onDrag, this);
   }
 
@@ -78,6 +79,7 @@ export class VideoPlayerCanvas extends Component {
     this.player.node.off(VideoEventType.Stop, this._onStopped, this);
     this.player.node.off(VideoEventType.Goto, this._onGoto, this);
     this.player.node.off(VideoEventType.Step, this._onStep, this);
+    this.player.node.off(VideoEventType.Ended, this._onEnded, this);
     this.player.node.off(NodeEventType.TOUCH_MOVE, this._onDrag, this);
   }
 
@@ -182,6 +184,13 @@ export class VideoPlayerCanvas extends Component {
    */
   private _onStep(time: number) {
     this.state.string = `[Step] ${time.toFixed(1)}s`;
+  }
+
+  /**
+   * 视频完成播放事件
+   */
+  private _onEnded() {
+    this.state.string = "[Ended]";
   }
 
   /**
