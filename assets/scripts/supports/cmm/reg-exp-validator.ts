@@ -1,8 +1,15 @@
+/*
+ * @Author: DoooReyn
+ * @Date: 2023-07-18 17:12:59
+ * @LastModifiedBy:   DoooReyn
+ * @LastModifiedAt: 2023-07-18 17:12:59
+ */
+
 /**
  * 正则验证器
  */
 export namespace RegExpValidator {
-  const VALID_URL =
+  const URL =
     /^(?:http(s)?:\/\/)?[\w.-]+(?:\.[\w\.-]+)+[\w\-\._~:/?#[\]@!\$&'\*\+,;=.]+$/;
 
   /**
@@ -11,6 +18,6 @@ export namespace RegExpValidator {
    * @returns
    */
   export function isUrl(url: string) {
-    return VALID_URL.test(url);
+    return URL.test(url);
   }
 }
