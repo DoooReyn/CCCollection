@@ -9,10 +9,10 @@ import {
   _decorator,
   error,
   resources,
-} from "cc";
+} from 'cc';
 
-import { VideoPlayer, VideoEventType } from "../../supports/video-player";
-import { Numbers } from "../../supports/cmm/numbers";
+import { VideoPlayer, VideoEventType } from '../../supports/video-player';
+import { Numbers } from '../../supports/cmm/numbers';
 
 const { ccclass, property } = _decorator;
 
@@ -21,7 +21,7 @@ const { ccclass, property } = _decorator;
  * - 支持从本地和远程加载
  * - 可以拖动视频节点
  */
-@ccclass("VideoPlayerCanvas")
+@ccclass('VideoPlayerCanvas')
 export class VideoPlayerCanvas extends Component {
   /**
    * 视频播放器
@@ -86,7 +86,7 @@ export class VideoPlayerCanvas extends Component {
   protected start() {
     // 您可以使用以下三种方式之一来加载视频资源
     // 1. 以 resources 下的资源加载（路径）
-    this.player.load("cocosvideo");
+    this.player.load('cocosvideo');
 
     // 2. 以 resources 下的资源加载（VideoClip）
     // resources.load("cocosvideo", VideoClip, (err: Error, clip: VideoClip) => {
@@ -127,7 +127,7 @@ export class VideoPlayerCanvas extends Component {
    * @param clip 视频片段资源
    */
   private _onLoadOk(clip: VideoClip) {
-    this.state.string = "[LoadOk]";
+    this.state.string = '[LoadOk]';
   }
 
   /**
@@ -135,7 +135,7 @@ export class VideoPlayerCanvas extends Component {
    * @param video HTML 视频标签
    */
   private _onReady(video: HTMLVideoElement) {
-    this.state.string = "[Ready]";
+    this.state.string = '[Ready]';
     const ratio = 1;
     const w = video.videoWidth * ratio;
     const h = video.videoHeight * ratio;
@@ -146,28 +146,28 @@ export class VideoPlayerCanvas extends Component {
    * 视频已播放事件
    */
   private _onPlayed() {
-    this.state.string = "[Play]";
+    this.state.string = '[Play]';
   }
 
   /**
    * 视频已暂停事件
    */
   private _onPaused() {
-    this.state.string = "[Pause]";
+    this.state.string = '[Pause]';
   }
 
   /**
    * 视频已恢复事件
    */
   private _onResumed() {
-    this.state.string = "[Resume]";
+    this.state.string = '[Resume]';
   }
 
   /**
    * 视频已停止事件
    */
   private _onStopped() {
-    this.state.string = "[Stop]";
+    this.state.string = '[Stop]';
   }
 
   /**
@@ -190,7 +190,7 @@ export class VideoPlayerCanvas extends Component {
    * 视频完成播放事件
    */
   private _onEnded() {
-    this.state.string = "[Ended]";
+    this.state.string = '[Ended]';
   }
 
   /**
