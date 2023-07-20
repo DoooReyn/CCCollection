@@ -5,7 +5,7 @@
  * @LastModifiedAt: 2023-07-18 22:22:40
  */
 
-import { _decorator, AudioClip, Component, error } from 'cc';
+import { _decorator, AudioClip, Component, error, log } from 'cc';
 import { Stores } from '../../supports/storage';
 import { Device } from '../../supports/device/device';
 import { Ciphers } from '../../supports/cipher/ciphers';
@@ -15,7 +15,8 @@ import {
   C_AES_IV,
   C_SETTING,
 } from '../../supports/cmm/constants';
-import { ResLoader } from '../../supports/res/res-loader';
+import { AudioPlayer } from '../../supports/audio-player/audio-player';
+import { E_AdvanceSetting } from '../../supports/cmm/setting';
 const { ccclass } = _decorator;
 
 /**
@@ -27,13 +28,14 @@ export class AudioPlayerCanvas extends Component {
     Device.instance.init(C_HOME_PAGE);
     Ciphers.AES.init(C_AES_KEY, C_AES_IV);
     Stores.Advance.init(C_SETTING);
-    ResLoader.instance.loadDir({
-      dir: '/',
-      type: AudioClip,
-      onBad: error,
-      onOK: (clips) => {
-        console.log(clips);
-      },
-    });
+    log(Stores.Advance.toJson());
+    Stores.Advance.write(E_AdvanceSetting.bgm_on, true);
+    AudioPlayer.instance.init();
+    setTimeout(() => {
+      AudioPlayer.instance.playBgm({ path: 'bgm-lobby', loop: false });
+      AudioPlayer.instance.node.on('bgm-ended', () => {
+        AudioPlayer.instance.playSfx({ path: 'sfx-click' });
+      });
+    }, 2000);
   }
 }

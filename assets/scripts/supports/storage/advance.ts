@@ -92,7 +92,7 @@ export class Advance<P extends I_AdvancePreset> {
    * @param key 存储项
    * @returns
    */
-  read(key: string) {
+  read<K extends keyof P>(key: K): P[K] {
     this._checkInited();
     return this._data[key];
   }
