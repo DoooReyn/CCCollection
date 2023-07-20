@@ -28,7 +28,6 @@ export class AudioPlayer extends Component {
    */
   private _onBgmComplete(source: AudioSource) {
     if (source === this._bgm) {
-      log('背景音乐播放完成', source);
       this.node.emit('bgm-ended');
     }
   }

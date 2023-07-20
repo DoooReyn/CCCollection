@@ -104,7 +104,9 @@ export class Advance<P extends I_AdvancePreset> {
    */
   write<K extends keyof P>(key: K, val: P[K]) {
     this._checkInited();
-    this._data[key] = val;
+    if (key in this._data) {
+      this._data[key] = val;
+    }
   }
 
   /**

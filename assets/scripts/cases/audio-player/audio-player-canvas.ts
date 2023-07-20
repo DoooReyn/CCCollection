@@ -16,7 +16,6 @@ import {
   C_SETTING,
 } from '../../supports/cmm/constants';
 import { AudioPlayer } from '../../supports/audio-player/audio-player';
-import { E_AdvanceSetting } from '../../supports/cmm/setting';
 const { ccclass } = _decorator;
 
 /**
@@ -25,17 +24,17 @@ const { ccclass } = _decorator;
 @ccclass('AudioPlayerCanvas')
 export class AudioPlayerCanvas extends Component {
   start() {
+    // 初始化需要的模块
     Device.instance.init(C_HOME_PAGE);
     Ciphers.AES.init(C_AES_KEY, C_AES_IV);
     Stores.Advance.init(C_SETTING);
-    log(Stores.Advance.toJson());
-    Stores.Advance.write(E_AdvanceSetting.bgm_on, true);
     AudioPlayer.instance.init();
-    setTimeout(() => {
-      AudioPlayer.instance.playBgm({ path: 'bgm-lobby', loop: false });
-      AudioPlayer.instance.node.on('bgm-ended', () => {
-        AudioPlayer.instance.playSfx({ path: 'sfx-click' });
-      });
-    }, 2000);
+
+    // 播放音乐
+    AudioPlayer.instance.playBgm({ path: 'bgm-lobby', loop: false });
+    AudioPlayer.instance.node.on('bgm-ended', () => {
+      log('背景音乐播放完成');
+      AudioPlayer.instance.playSfx({ path: 'sfx-click' });
+    });
   }
 }
