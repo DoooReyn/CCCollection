@@ -6,12 +6,12 @@
  */
 
 import CryptoES from 'crypto-es';
-import { BaseCipher } from './cipher-base';
+import { I_BaseCipher } from './cipher-base';
 
 /**
  * Base64 加密/解密
  */
-export class Base64Cipher implements BaseCipher {
+export class Base64Cipher implements I_BaseCipher {
   encrypt(msg: string): string {
     return CryptoES.enc.Base64.stringify(
       CryptoES.enc.Utf8.parse(msg)

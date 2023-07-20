@@ -7,13 +7,13 @@
 
 import CryptoES from 'crypto-es';
 import { CipherCfg, Format } from 'crypto-es/lib/cipher-core';
-import { BaseCipher } from './cipher-base';
+import { I_BaseCipher } from './cipher-base';
 
 /**
  * AES 加密/解密
  * - 使用之前需要先设置密钥
  */
-export class AesCipher implements BaseCipher {
+export class AesCipher implements I_BaseCipher {
   // 加密的 key
   private _key: string = null!;
   // 加密的 iv

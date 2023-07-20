@@ -6,7 +6,6 @@
  */
 
 import {
-  AssetManager,
   Component,
   Game,
   Sprite,
@@ -19,7 +18,7 @@ import {
   warn,
 } from 'cc';
 
-import { AssetItem } from '../cmm/interface';
+import { I_AssetItem } from '../cmm/interface';
 import { Numbers } from '../cmm/numbers';
 import { RegExpValidator } from '../cmm/reg-exp-validator';
 import { ResLoader } from '../res/res-loader';
@@ -33,7 +32,7 @@ import { ResLoader } from '../res/res-loader';
  * - Playing    播放中
  * - Paused     已暂停
  */
-export enum VideoState {
+export enum E_VideoState {
   Primitive = 0,
   Loading,
   Loaded,
@@ -56,7 +55,7 @@ export enum VideoState {
  * - Step       帧切换
  * - Ended      视频播放完成
  */
-export enum VideoEventType {
+export enum E_VideoEventType {
   Loading = 'loading',
   LoadOk = 'load-ok',
   LoadBad = 'load-bad',
@@ -101,7 +100,7 @@ export class VideoPlayer extends Component {
   /**
    * 当前视频状态
    */
-  private _state: VideoState;
+  private _state: E_VideoState;
   /**
    * 用于播放视频的 Sprite
    */
@@ -157,7 +156,7 @@ export class VideoPlayer extends Component {
     this._canvas = canvas;
     this._ctx = canvas.getContext('2d');
     this._display = this.getComponent(Sprite);
-    this._state = VideoState.Primitive;
+    this._state = E_VideoState.Primitive;
   }
 
   protected onEnable(): void {
@@ -232,8 +231,8 @@ export class VideoPlayer extends Component {
       type: VideoClip,
       onOK: (clips) => this._loadClip(clips[0]),
       onBad: (err) => {
-        this._state = VideoState.Primitive;
-        this.node.emit(VideoEventType.LoadBad, {
+        this._state = E_VideoState.Primitive;
+        this.node.emit(E_VideoEventType.LoadBad, {
           bundle,
           path,
           reason: err.toString(),
@@ -253,8 +252,8 @@ export class VideoPlayer extends Component {
       type: VideoClip,
       onOK: (clip) => this._loadClip(clip),
       onBad: (err) => {
-        this._state = VideoState.Primitive;
-        this.node.emit(VideoEventType.LoadBad, {
+        this._state = E_VideoState.Primitive;
+        this.node.emit(E_VideoEventType.LoadBad, {
           url,
           reason: err.toString(),
         });
@@ -277,23 +276,23 @@ export class VideoPlayer extends Component {
     video.style.display = 'none';
     video.addEventListener('loadeddata', () => {
       if (this.isDataLoaded) return;
-      this._state = VideoState.Loaded;
-      event.emit(VideoEventType.Ready, video);
+      this._state = E_VideoState.Loaded;
+      event.emit(E_VideoEventType.Ready, video);
     });
     video.addEventListener('ended', () => {
-      event.emit(VideoEventType.Ended);
+      event.emit(E_VideoEventType.Ended);
       if (this.loop) {
         this.current = 0;
         this.play();
       } else {
-        this._state = VideoState.Loaded;
+        this._state = E_VideoState.Loaded;
       }
     });
     document.body.appendChild(video);
 
     this._element = video;
-    this._state = VideoState.Loaded;
-    event.emit(VideoEventType.LoadOk, clip);
+    this._state = E_VideoState.Loaded;
+    event.emit(E_VideoEventType.LoadOk, clip);
   }
 
   /**
@@ -306,7 +305,7 @@ export class VideoPlayer extends Component {
     _ctx.clearRect(0, 0, _width, _height);
     _ctx.drawImage(_element, 0, 0, _width, _height);
     _display.spriteFrame = SpriteFrame.createWithImage(_canvas);
-    node.emit(VideoEventType.Step, _element.currentTime);
+    node.emit(E_VideoEventType.Step, _element.currentTime);
   }
 
   /**
@@ -346,13 +345,13 @@ export class VideoPlayer extends Component {
    * @param asset 视频资源
    * @returns
    */
-  public load(asset: string | AssetItem | VideoClip) {
+  public load(asset: string | I_AssetItem | VideoClip) {
     if (!this.isPrimitive) {
       return warn('视频加载中或已加载.');
     }
 
-    this._state = VideoState.Loading;
-    this.node.emit(VideoEventType.Loading, { asset });
+    this._state = E_VideoState.Loading;
+    this.node.emit(E_VideoEventType.Loading, { asset });
 
     if (asset instanceof VideoClip) {
       this._loadClip(asset);
@@ -370,7 +369,7 @@ export class VideoPlayer extends Component {
    * @returns
    */
   public unload() {
-    if (this._state <= VideoState.Primitive) return;
+    if (this._state <= E_VideoState.Primitive) return;
 
     if (this.isLoaded) {
       this._element.pause();
@@ -386,7 +385,7 @@ export class VideoPlayer extends Component {
     this._element = null;
     this._canvas = null;
     this._ctx = null;
-    this._state = VideoState.Primitive;
+    this._state = E_VideoState.Primitive;
   }
 
   /**
@@ -399,8 +398,8 @@ export class VideoPlayer extends Component {
       this._element.volume = this.volume;
       this._element.muted = this.muted;
       this._element.play();
-      this._state = VideoState.Playing;
-      this.node.emit(VideoEventType.Play);
+      this._state = E_VideoState.Playing;
+      this.node.emit(E_VideoEventType.Play);
     }
   }
 
@@ -411,7 +410,7 @@ export class VideoPlayer extends Component {
     if (this.isLoaded) {
       const to = Numbers.reserve(Numbers.clamp(timePiece, 0, this.duration), 1);
       this._element.currentTime = to;
-      this.node.emit(VideoEventType.Goto, to);
+      this.node.emit(E_VideoEventType.Goto, to);
       this._render();
     }
   }
@@ -422,8 +421,8 @@ export class VideoPlayer extends Component {
   public pause() {
     if (this.isPlaying) {
       this._element.pause();
-      this._state = VideoState.Paused;
-      this.node.emit(VideoEventType.Pause);
+      this._state = E_VideoState.Paused;
+      this.node.emit(E_VideoEventType.Pause);
     }
   }
 
@@ -433,8 +432,8 @@ export class VideoPlayer extends Component {
   public resume() {
     if (this.isPaused) {
       this._element.play();
-      this._state = VideoState.Playing;
-      this.node.emit(VideoEventType.Resume);
+      this._state = E_VideoState.Playing;
+      this.node.emit(E_VideoEventType.Resume);
     }
   }
 
@@ -446,8 +445,8 @@ export class VideoPlayer extends Component {
       this._element.pause();
       this._element.load();
       this._render();
-      this._state = VideoState.Loaded;
-      this.node.emit(VideoEventType.Stop);
+      this._state = E_VideoState.Loaded;
+      this.node.emit(E_VideoEventType.Stop);
     }
   }
 
@@ -554,41 +553,41 @@ export class VideoPlayer extends Component {
    * 是否初始状态
    */
   public get isPrimitive() {
-    return this._state === VideoState.Primitive;
+    return this._state === E_VideoState.Primitive;
   }
 
   /**
    * 是否加载中状态
    */
   public get isLoading() {
-    return this._state === VideoState.Loading;
+    return this._state === E_VideoState.Loading;
   }
 
   /**
    * 是否加载完成状态
    */
   public get isLoaded() {
-    return this._state >= VideoState.Loaded;
+    return this._state >= E_VideoState.Loaded;
   }
 
   /**
    * 是否数据加载完成状态
    */
   public get isDataLoaded() {
-    return this._state >= VideoState.DataLoaded;
+    return this._state >= E_VideoState.DataLoaded;
   }
 
   /**
    * 是否正在播放中状态
    */
   public get isPlaying() {
-    return this._state === VideoState.Playing;
+    return this._state === E_VideoState.Playing;
   }
 
   /**
    * 是否暂停状态
    */
   public get isPaused() {
-    return this._state === VideoState.Paused;
+    return this._state === E_VideoState.Paused;
   }
 }

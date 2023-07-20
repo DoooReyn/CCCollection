@@ -8,7 +8,7 @@
 /**
  * 资源加载格式
  */
-export interface AssetItem {
+export interface I_AssetItem {
   /**
    * 资源包名称
    */
@@ -22,7 +22,7 @@ export interface AssetItem {
 /**
  * 尺寸格式
  */
-export interface SizeLike {
+export interface I_SizeLike {
   width: number;
   height: number;
 }
@@ -30,7 +30,7 @@ export interface SizeLike {
 /**
  * 坐标格式
  */
-export interface PointLike {
+export interface I_PointLike {
   x: number;
   y: number;
   z?: number;
@@ -39,7 +39,7 @@ export interface PointLike {
 /**
  * 矩形格式
  */
-export interface RectLike {
+export interface I_RectLike {
   x: number;
   y: number;
   w: number;
@@ -49,4 +49,4 @@ export interface RectLike {
 /**
  * 一般对象格式
  */
-export type ObjectLike = Record<string | number | symbol, any>;
+export type I_ObjectLike = Record<string | number | symbol, any>;

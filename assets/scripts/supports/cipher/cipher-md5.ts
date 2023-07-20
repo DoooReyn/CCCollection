@@ -6,12 +6,12 @@
  */
 
 import CryptoES from 'crypto-es';
-import { BaseCipher } from './cipher-base';
+import { I_BaseCipher } from './cipher-base';
 
 /**
  * MD5 加密
  */
-export class Md5Cipher implements BaseCipher {
+export class Md5Cipher implements I_BaseCipher {
   encrypt(msg: string): string {
     return CryptoES.MD5(msg).toString();
   }

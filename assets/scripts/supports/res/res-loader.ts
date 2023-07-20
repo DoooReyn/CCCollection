@@ -5,18 +5,18 @@
  * @LastModifiedAt: 2023-07-19 15:39:48
  */
 
-import { Asset, AssetManager, Constructor, assetManager, __private } from 'cc';
+import { Asset, AssetManager, Constructor, assetManager, __private, log } from 'cc';
 import { Method1, Method2 } from '../cmm/method';
 
 /**
  * 资源类型
  */
-type AssetType<T = Asset> = Constructor<T>;
+type T_AssetType<T = Asset> = Constructor<T>;
 
 /**
  * 资源加载进度方法
  */
-type LoadProgress = (
+type T_LoadProgress = (
   finished?: number,
   total?: number,
   item?: AssetManager.RequestItem
@@ -25,18 +25,18 @@ type LoadProgress = (
 /**
  * 资源加载基础格式
  */
-interface BaseResOptions<T extends Asset> {
-  type: AssetType<T>;
+interface I_BaseResOptions<T extends Asset> {
+  type: T_AssetType<T>;
   onBad?: Method1<Error, void>;
 }
 
 /**
  * 同类型资源加载格式
  */
-interface OneResOptions<T extends Asset> extends BaseResOptions<T> {
+interface I_OneResOptions<T extends Asset> extends I_BaseResOptions<T> {
   bundle?: string;
   path: string | string[];
-  onProgress?: LoadProgress;
+  onProgress?: T_LoadProgress;
   onOK?: Method1<T[], void>;
   onDone?: Method2<T[], number, void>;
 }
@@ -44,11 +44,11 @@ interface OneResOptions<T extends Asset> extends BaseResOptions<T> {
 /**
  * 目录下同类型资源加载格式
  */
-interface DirResOptions<T extends Asset> extends BaseResOptions<T> {
+interface I_DirResOptions<T extends Asset> extends I_BaseResOptions<T> {
   bundle?: string;
   dir: string;
-  type: AssetType<T>;
-  onProgress?: LoadProgress;
+  type: T_AssetType<T>;
+  onProgress?: T_LoadProgress;
   onOK?: Method1<T[], void>;
   onDone?: Method1<T[], void>;
 }
@@ -56,7 +56,7 @@ interface DirResOptions<T extends Asset> extends BaseResOptions<T> {
 /**
  * 远程资源加载格式
  */
-interface RemoteResOptions<T extends Asset> extends BaseResOptions<T> {
+interface I_RemoteResOptions<T extends Asset> extends I_BaseResOptions<T> {
   url: string;
   onOK?: Method1<T, void>;
   onDone?: Method1<T, void>;
@@ -69,7 +69,7 @@ interface RemoteResOptions<T extends Asset> extends BaseResOptions<T> {
 /**
  * 资源包加载格式
  */
-interface BundleResOptions {
+interface I_BundleResOptions {
   bundle: string;
   version?: string;
   onBad?: Method1<Error, void>;
@@ -89,7 +89,7 @@ export class ResLoader {
    * @param options 资源包加载格式
    * @returns
    */
-  loadBundle(options: BundleResOptions) {
+  loadBundle(options: I_BundleResOptions) {
     const data = assetManager.getBundle(options.bundle);
     if (data) return options?.onDone(data);
 
@@ -105,7 +105,7 @@ export class ResLoader {
    * @param options 资源加载格式
    * @returns
    */
-  loadOne<T extends Asset>(options: OneResOptions<T>) {
+  loadOne<T extends Asset>(options: I_OneResOptions<T>) {
     if (!Array.isArray(options.path)) {
       options.path = [options.path];
     }
@@ -136,7 +136,7 @@ export class ResLoader {
    * 加载目录下同类型资源
    * @param options 目录下资源加载格式
    */
-  loadDir<T extends Asset>(options: DirResOptions<T>) {
+  loadDir<T extends Asset>(options: I_DirResOptions<T>) {
     this.loadBundle({
       bundle: options.bundle || 'resources',
       onBad: (err) => options?.onBad(err),
@@ -161,7 +161,7 @@ export class ResLoader {
    * 加载远程资源
    * @param options 远程资源加载格式
    */
-  loadRemote<T extends Asset>(options: RemoteResOptions<T>) {
+  loadRemote<T extends Asset>(options: I_RemoteResOptions<T>) {
     assetManager.loadRemote<T>(
       options.url,
       options.remote || null,
@@ -182,7 +182,7 @@ export class ResLoader {
   release<T extends Asset>(
     path: string,
     bundleName?: string,
-    type?: AssetType<T>
+    type?: T_AssetType<T>
   ) {
     bundleName = bundleName || 'resources';
     const bundle = assetManager.getBundle(bundleName);
@@ -220,8 +220,8 @@ export class ResLoader {
    * 输出当前资源列表信息
    */
   dump() {
-    console.log('当前资源列表');
-    assetManager.assets.forEach(console.log.bind(console, '#'));
-    console.log(`当前资源总数:${assetManager.assets.count}`);
+    log('当前资源列表');
+    assetManager.assets.forEach(log.bind(log, '#'));
+    log(`当前资源总数:${assetManager.assets.count}`);
   }
 }

@@ -9,7 +9,7 @@ import {
   _decorator,
 } from 'cc';
 
-import { VideoPlayer, VideoEventType } from '../../supports/video-player/video-player';
+import { VideoPlayer, E_VideoEventType } from '../../supports/video-player/video-player';
 import { Numbers } from '../../supports/cmm/numbers';
 
 const { ccclass, property } = _decorator;
@@ -52,32 +52,32 @@ export class VideoPlayerCanvas extends Component {
   muteBtn: Toggle = null;
 
   protected onEnable(): void {
-    this.player.node.on(VideoEventType.Loading, this._onLoading, this);
-    this.player.node.on(VideoEventType.LoadBad, this._onLoadBad, this);
-    this.player.node.on(VideoEventType.LoadOk, this._onLoadOk, this);
-    this.player.node.on(VideoEventType.Ready, this._onReady, this);
-    this.player.node.on(VideoEventType.Play, this._onPlayed, this);
-    this.player.node.on(VideoEventType.Pause, this._onPaused, this);
-    this.player.node.on(VideoEventType.Resume, this._onResumed, this);
-    this.player.node.on(VideoEventType.Stop, this._onStopped, this);
-    this.player.node.on(VideoEventType.Goto, this._onGoto, this);
-    this.player.node.on(VideoEventType.Step, this._onStep, this);
-    this.player.node.on(VideoEventType.Ended, this._onEnded, this);
+    this.player.node.on(E_VideoEventType.Loading, this._onLoading, this);
+    this.player.node.on(E_VideoEventType.LoadBad, this._onLoadBad, this);
+    this.player.node.on(E_VideoEventType.LoadOk, this._onLoadOk, this);
+    this.player.node.on(E_VideoEventType.Ready, this._onReady, this);
+    this.player.node.on(E_VideoEventType.Play, this._onPlayed, this);
+    this.player.node.on(E_VideoEventType.Pause, this._onPaused, this);
+    this.player.node.on(E_VideoEventType.Resume, this._onResumed, this);
+    this.player.node.on(E_VideoEventType.Stop, this._onStopped, this);
+    this.player.node.on(E_VideoEventType.Goto, this._onGoto, this);
+    this.player.node.on(E_VideoEventType.Step, this._onStep, this);
+    this.player.node.on(E_VideoEventType.Ended, this._onEnded, this);
     this.player.node.on(NodeEventType.TOUCH_MOVE, this._onDrag, this);
   }
 
   protected onDisable(): void {
-    this.player.node.off(VideoEventType.Loading, this._onLoading, this);
-    this.player.node.off(VideoEventType.LoadBad, this._onLoadBad, this);
-    this.player.node.off(VideoEventType.LoadOk, this._onLoadOk, this);
-    this.player.node.off(VideoEventType.Ready, this._onReady, this);
-    this.player.node.off(VideoEventType.Play, this._onPlayed, this);
-    this.player.node.off(VideoEventType.Pause, this._onPaused, this);
-    this.player.node.off(VideoEventType.Resume, this._onResumed, this);
-    this.player.node.off(VideoEventType.Stop, this._onStopped, this);
-    this.player.node.off(VideoEventType.Goto, this._onGoto, this);
-    this.player.node.off(VideoEventType.Step, this._onStep, this);
-    this.player.node.off(VideoEventType.Ended, this._onEnded, this);
+    this.player.node.off(E_VideoEventType.Loading, this._onLoading, this);
+    this.player.node.off(E_VideoEventType.LoadBad, this._onLoadBad, this);
+    this.player.node.off(E_VideoEventType.LoadOk, this._onLoadOk, this);
+    this.player.node.off(E_VideoEventType.Ready, this._onReady, this);
+    this.player.node.off(E_VideoEventType.Play, this._onPlayed, this);
+    this.player.node.off(E_VideoEventType.Pause, this._onPaused, this);
+    this.player.node.off(E_VideoEventType.Resume, this._onResumed, this);
+    this.player.node.off(E_VideoEventType.Stop, this._onStopped, this);
+    this.player.node.off(E_VideoEventType.Goto, this._onGoto, this);
+    this.player.node.off(E_VideoEventType.Step, this._onStep, this);
+    this.player.node.off(E_VideoEventType.Ended, this._onEnded, this);
     this.player.node.off(NodeEventType.TOUCH_MOVE, this._onDrag, this);
   }
 

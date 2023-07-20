@@ -5,7 +5,7 @@
  * @LastModifiedAt: 2023-07-18 17:06:01
  */
 
-import { Setting } from "./setting";
+import { I_AdvanceSetting } from "./setting";
 
 // 该文件为系统需要的常量，你可以根据需要修改对应值，或者通过配置文件生成
 
@@ -28,7 +28,7 @@ export const C_AES_IV = '101112131415161718191a1b1c1d1e1f';
 /**
  * 设置选项
  */
-export const C_SETTING: Setting = {
+export const C_SETTING: I_AdvanceSetting = {
     bgm_on: true,
     sfx_on: true,
     bgm_volume: 1.0,

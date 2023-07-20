@@ -8,7 +8,7 @@
 /**
  * 加密器接口
  */
-export interface BaseCipher {
+export interface I_BaseCipher {
   /**
    * 加密
    * @param msg 需加密的内容

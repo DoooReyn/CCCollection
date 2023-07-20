@@ -5,7 +5,7 @@
  * @LastModifiedAt: 2023-07-18 22:22:40
  */
 
-import { _decorator, AudioClip, Component } from 'cc';
+import { _decorator, AudioClip, Component, error } from 'cc';
 import { Stores } from '../../supports/storage';
 import { Device } from '../../supports/device/device';
 import { Ciphers } from '../../supports/cipher/ciphers';
@@ -30,7 +30,7 @@ export class AudioPlayerCanvas extends Component {
     ResLoader.instance.loadDir({
       dir: '/',
       type: AudioClip,
-      onBad: (err) => console.error(err),
+      onBad: error,
       onOK: (clips) => {
         console.log(clips);
       },

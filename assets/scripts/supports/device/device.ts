@@ -13,7 +13,7 @@ import { Numbers } from '../cmm/numbers';
 /**
  * 设备概要信息
  */
-export interface DeviceBriefInfo {
+interface I_DeviceBriefInfo {
   isHDR: boolean;
   cookieEnabled: boolean;
   vibrateEnabled: boolean;
@@ -106,7 +106,7 @@ export class Device {
    * 设备概要信息
    * - 使用前请先初始化
    */
-  brief: DeviceBriefInfo = null!;
+  brief: I_DeviceBriefInfo = null!;
 
   /**
    * 检查是否已初始化

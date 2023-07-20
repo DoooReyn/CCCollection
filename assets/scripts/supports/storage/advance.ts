@@ -9,12 +9,12 @@ import { sys } from 'cc';
 import { Ciphers } from '../cipher/ciphers';
 import { Device } from '../device/device';
 import { Objects } from '../cmm/objects';
-import { BaseCipher } from '../cipher/cipher-base';
+import { I_BaseCipher } from '../cipher/cipher-base';
 
 /**
  * 高级存储数据模板
  */
-export interface AdvancePreset {
+export interface I_AdvancePreset {
   [key: string]: string | number | boolean;
 }
 
@@ -23,10 +23,10 @@ export interface AdvancePreset {
  * - 支持自定义数据模板
  * - 支持自定义加、解密方案
  */
-export class Advance<P extends AdvancePreset> {
+export class Advance<P extends I_AdvancePreset> {
   public readonly name: string = 'advance-storage';
   private _key: string = null!;
-  private _cipher: BaseCipher = null!;
+  private _cipher: I_BaseCipher = null!;
   private _preset: P;
   private _data: P;
   private _inited: boolean = false;
@@ -69,7 +69,7 @@ export class Advance<P extends AdvancePreset> {
    * @param preset 预设值
    * @param cipher 加解密方案-默认为 Ciphers.AES
    */
-  init(preset: P, cipher: BaseCipher = Ciphers.AES) {
+  init(preset: P, cipher: I_BaseCipher = Ciphers.AES) {
     if (this._inited) throw new Error('Advance-storage initialized.');
 
     this._inited = true;
