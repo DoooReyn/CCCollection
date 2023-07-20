@@ -1,8 +1,8 @@
 /*
- * @Author: DoooReyn 
- * @Date: 2023-07-18 20:36:56 
- * @LastModifiedBy: DoooReyn 
- * @LastModifiedAt: 2023-07-18 20:36:56 
+ * @Author: DoooReyn
+ * @Date: 2023-07-18 20:36:56
+ * @LastModifiedBy: DoooReyn
+ * @LastModifiedAt: 2023-07-20 21:12:51
  */
 
 import {
@@ -14,16 +14,15 @@ import {
   UITransform,
   VideoClip,
   _decorator,
-  assetManager,
   error,
   game,
-  resources,
   warn,
-} from "cc";
+} from 'cc';
 
-import { AssetItem } from "./cmm/interface";
-import { Numbers } from "./cmm/numbers";
-import { RegExpValidator } from "./cmm/reg-exp-validator";
+import { AssetItem } from './cmm/interface';
+import { Numbers } from './cmm/numbers';
+import { RegExpValidator } from './cmm/reg-exp-validator';
+import { ResLoader } from './res/res-loader';
 
 /**
  * 视频状态
@@ -58,17 +57,17 @@ export enum VideoState {
  * - Ended      视频播放完成
  */
 export enum VideoEventType {
-  Loading = "loading",
-  LoadOk = "load-ok",
-  LoadBad = "load-bad",
-  Ready = "ready",
-  Play = "play",
-  Pause = "pause",
-  Resume = "resume",
-  Stop = "stopped",
-  Goto = "goto",
-  Step = "step",
-  Ended = "ended",
+  Loading = 'loading',
+  LoadOk = 'load-ok',
+  LoadBad = 'load-bad',
+  Ready = 'ready',
+  Play = 'play',
+  Pause = 'pause',
+  Resume = 'resume',
+  Stop = 'stopped',
+  Goto = 'goto',
+  Step = 'step',
+  Ended = 'ended',
 }
 
 const { ccclass, requireComponent } = _decorator;
@@ -84,7 +83,7 @@ const { ccclass, requireComponent } = _decorator;
  *   要么在最底层、要么在最高层），可控性拉满，开发者可以针对 Sprite 做更多的操
  *   作，比如添加滤镜等等。
  */
-@ccclass("VideoPlayer")
+@ccclass('VideoPlayer')
 @requireComponent(Sprite)
 export class VideoPlayer extends Component {
   /**
@@ -146,17 +145,17 @@ export class VideoPlayer extends Component {
 
   protected onLoad() {
     // 创建后台 Canvas 元素
-    const canvas = document.createElement("canvas");
+    const canvas = document.createElement('canvas');
     canvas.id = `canvas_video_${Date.now()}`;
     canvas.hidden = true;
-    canvas.style.visibility = "hidden";
-    canvas.style.display = "none";
+    canvas.style.visibility = 'hidden';
+    canvas.style.display = 'none';
     document.body.appendChild(canvas);
 
     // 初始化
     this._resumable = false;
     this._canvas = canvas;
-    this._ctx = canvas.getContext("2d");
+    this._ctx = canvas.getContext('2d');
     this._display = this.getComponent(Sprite);
     this._state = VideoState.Primitive;
   }
@@ -222,46 +221,26 @@ export class VideoPlayer extends Component {
   }
 
   /**
-   * 从本地加载视频片段资源
-   * @param bundle 资源包
-   * @param path 资源路径
-   */
-  private _loadFromLocal(bundle: AssetManager.Bundle, path: string) {
-    bundle.load(path, VideoClip, (err: Error, clip: VideoClip) => {
-      if (err) {
-        this._state = VideoState.Primitive;
-        this.node.emit(VideoEventType.LoadBad, {
-          path,
-          bundle: bundle.name,
-          reason: err.toString(),
-        });
-        return error(`视频加载失败 ${path}`);
-      }
-      this._loadClip(clip);
-    });
-  }
-
-  /**
    * 从本地 Bundle 加载视频片段资源
    * @param bundle 本地资源包
    * @param path 视频资源路径
    */
   private _loadFromBundle(bundle: string, path: string) {
-    assetManager.loadBundle(
+    ResLoader.instance.loadOne({
+      path,
       bundle,
-      (err: Error, bundle: AssetManager.Bundle) => {
-        if (err) {
-          this._state = VideoState.Primitive;
-          this.node.emit(VideoEventType.LoadBad, {
-            bundle: bundle.name,
-            path,
-            reason: err.toString(),
-          });
-          return error(`视频加载失败 ${bundle}/${path}`);
-        }
-        this._loadFromLocal(bundle, path);
-      }
-    );
+      type: VideoClip,
+      onOK: (clips) => this._loadClip(clips[0]),
+      onBad: (err) => {
+        this._state = VideoState.Primitive;
+        this.node.emit(VideoEventType.LoadBad, {
+          bundle,
+          path,
+          reason: err.toString(),
+        });
+        return error(`视频加载失败 ${bundle}/${path}`);
+      },
+    });
   }
 
   /**
@@ -269,16 +248,18 @@ export class VideoPlayer extends Component {
    * @param url 视频网址
    */
   private _loadFromRemote(url: string) {
-    assetManager.loadRemote(url, VideoClip, (err: Error, clip: VideoClip) => {
-      if (err) {
+    ResLoader.instance.loadRemote({
+      url,
+      type: VideoClip,
+      onOK: (clip) => this._loadClip(clip),
+      onBad: (err) => {
         this._state = VideoState.Primitive;
         this.node.emit(VideoEventType.LoadBad, {
           url,
           reason: err.toString(),
         });
         return error(`视频加载失败 ${url}`);
-      }
-      this._loadClip(clip);
+      },
     });
   }
 
@@ -291,15 +272,15 @@ export class VideoPlayer extends Component {
     const video = (<any>clip)._video as HTMLVideoElement;
     video.controls = false;
     video.hidden = true;
-    video.crossOrigin = "anonymous";
-    video.style.visibility = "hidden";
-    video.style.display = "none";
-    video.addEventListener("loadeddata", () => {
+    video.crossOrigin = 'anonymous';
+    video.style.visibility = 'hidden';
+    video.style.display = 'none';
+    video.addEventListener('loadeddata', () => {
       if (this.isDataLoaded) return;
       this._state = VideoState.Loaded;
       event.emit(VideoEventType.Ready, video);
     });
-    video.addEventListener("ended", () => {
+    video.addEventListener('ended', () => {
       event.emit(VideoEventType.Ended);
       if (this.loop) {
         this.current = 0;
@@ -320,7 +301,8 @@ export class VideoPlayer extends Component {
    */
   private _render() {
     const { _ctx, _display, _canvas, _element, _width, _height, node } = this;
-    _display.spriteFrame && assetManager.releaseAsset(_display.spriteFrame);
+    _display.spriteFrame &&
+      ResLoader.instance.releaseAsset(_display.spriteFrame);
     _ctx.clearRect(0, 0, _width, _height);
     _ctx.drawImage(_element, 0, 0, _width, _height);
     _display.spriteFrame = SpriteFrame.createWithImage(_canvas);
@@ -366,7 +348,7 @@ export class VideoPlayer extends Component {
    */
   public load(asset: string | AssetItem | VideoClip) {
     if (!this.isPrimitive) {
-      return warn("视频加载中或已加载.");
+      return warn('视频加载中或已加载.');
     }
 
     this._state = VideoState.Loading;
@@ -374,14 +356,12 @@ export class VideoPlayer extends Component {
 
     if (asset instanceof VideoClip) {
       this._loadClip(asset);
-    } else if (typeof asset === "string") {
+    } else if (typeof asset === 'string') {
       RegExpValidator.isUrl(asset)
         ? this._loadFromRemote(asset)
-        : this._loadFromLocal(resources, asset);
+        : this._loadFromBundle('resources', asset);
     } else {
-      asset.bundle
-        ? this._loadFromBundle(asset.bundle, asset.path)
-        : this._loadFromLocal(resources, asset.path);
+      this._loadFromBundle(asset.bundle, asset.path);
     }
   }
 
@@ -390,22 +370,20 @@ export class VideoPlayer extends Component {
    * @returns
    */
   public unload() {
-    if (this._state <= VideoState.Primitive) {
-      return;
-    }
+    if (this._state <= VideoState.Primitive) return;
 
     if (this.isLoaded) {
       this._element.pause();
-      this._element.removeAttribute("src");
+      this._element.removeAttribute('src');
       this._element.remove();
       const frame = this._display.spriteFrame;
       this._display.spriteFrame = null;
-      frame && assetManager.releaseAsset(frame);
-      assetManager.releaseAsset(this._clip);
-      this._element = null;
-      this._clip = null;
+      frame && ResLoader.instance.releaseAsset(frame);
+      ResLoader.instance.releaseAsset(this._clip);
     }
     this._canvas.remove();
+    this._clip = null;
+    this._element = null;
     this._canvas = null;
     this._ctx = null;
     this._state = VideoState.Primitive;

@@ -7,8 +7,6 @@ import {
   Toggle,
   VideoClip,
   _decorator,
-  error,
-  resources,
 } from 'cc';
 
 import { VideoPlayer, VideoEventType } from '../../supports/video-player';
@@ -84,14 +82,14 @@ export class VideoPlayerCanvas extends Component {
   }
 
   protected start() {
-    // 您可以使用以下三种方式之一来加载视频资源
-    // 1. 以 resources 下的资源加载（路径）
-    this.player.load('cocosvideo');
+    const player = this.player;
 
-    // 2. 以 resources 下的资源加载（VideoClip）
-    // resources.load("cocosvideo", VideoClip, (err: Error, clip: VideoClip) => {
-    //   err ? error(err) : this.player.load(clip);
-    // });
+    // 您可以使用以下三种方式之一来加载视频资源
+    // 1. 以 resources 下的资源加载
+    player.load('cocosvideo');
+
+    // 2. 指定 bundle 下的资源加载
+    // player.load({ bundle: 'resources', path: 'cocosvideo' });
 
     // 3. 以网络资源加载（远程资源地址）
     // this.player.load("http://127.0.0.1:8080/cocosvideo.mp4");
