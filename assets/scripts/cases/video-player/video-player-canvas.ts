@@ -9,7 +9,7 @@ import {
   _decorator,
 } from 'cc';
 
-import { VideoPlayer, VideoEventType } from '../../supports/video-player';
+import { VideoPlayer, VideoEventType } from '../../supports/video-player/video-player';
 import { Numbers } from '../../supports/cmm/numbers';
 
 const { ccclass, property } = _decorator;

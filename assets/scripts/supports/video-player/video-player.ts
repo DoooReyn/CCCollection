@@ -19,10 +19,10 @@ import {
   warn,
 } from 'cc';
 
-import { AssetItem } from './cmm/interface';
-import { Numbers } from './cmm/numbers';
-import { RegExpValidator } from './cmm/reg-exp-validator';
-import { ResLoader } from './res/res-loader';
+import { AssetItem } from '../cmm/interface';
+import { Numbers } from '../cmm/numbers';
+import { RegExpValidator } from '../cmm/reg-exp-validator';
+import { ResLoader } from '../res/res-loader';
 
 /**
  * 视频状态
