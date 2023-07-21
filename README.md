@@ -26,12 +26,29 @@
 
 ## 已完成
 
-- 支持加、解密与自定义数据模板的本地存储方案 [Advance](./assets/scripts/supports/storage/advance.ts)
-- [视频播放器](./doc/video-player.md)
+- 支持加、解密与自定义数据模板的本地存储方案 [Advance][1]
+- 资源管理器 [ResLoader][2]
+  - 支持加载进度、完成、成功、失败回调
+  - 加载接口统一：
+    - `loadBundle`
+    - `loadOne`
+    - `loadDir`
+    - `loadRemote`
+  - 释放接口统一：
+    - `release`
+    - `releaseAsset`
+    - `releaseBundle`
+    - `releaseAll`
+- [视频播放器][3]
   - 区别于 `cc.VideoPlayer` 只能放在最顶层或最底层，该方案可以实现层级自由调整
   - 可以对画面做丰富的定制，比如移动、旋转、缩放、滤镜等
+- 音频播放器 [AudioPlayer][4]
+  - 支持分别对音效和音乐操作
+  - 支持开关控制、音量调节
 
 ## 计划中
 
-- 资源管理器
-- 音频播放器
+[1]: ./assets/scripts/supports/storage/advance.ts
+[2]: ./assets/scripts/supports/res/res-loader.ts
+[3]: ./doc/video-player.md
+[4]: ./assets/scripts/supports/audio-player/audio-player.ts
