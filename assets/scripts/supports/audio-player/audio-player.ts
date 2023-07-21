@@ -14,6 +14,18 @@ import { I_AssetItem } from '../cmm/interface';
 import { Numbers } from '../cmm/numbers';
 const { ccclass } = _decorator;
 
+/**
+ * 音频事件类型
+ */
+export enum E_BgmEventType {
+  Playing = 'bgm-playing',
+  Start = 'bgm-started',
+  Ended = 'bgm-ended',
+}
+
+/**
+ * 音频播放器
+ */
 @ccclass('AudioPlayer')
 export class AudioPlayer extends Component {
   static readonly instance: AudioPlayer = new AudioPlayer('AudioPlayer');
@@ -22,13 +34,24 @@ export class AudioPlayer extends Component {
   private _sfx!: Sfx;
 
   /**
-   * 背景音乐播放完成回调
+   * 背景音乐开始播放回调
+   * - 如果设置成循环，是不会调用的
+   * @param source 音源
+   */
+  private _onBgmStart(source: AudioSource) {
+    if (source === this._bgm) {
+      this.node.emit(E_BgmEventType.Start);
+    }
+  }
+
+  /**
+   * 背景音乐结束播放回调
    * - 如果设置成循环，是不会调用的
    * @param source 音源
    */
   private _onBgmComplete(source: AudioSource) {
     if (source === this._bgm) {
-      this.node.emit('bgm-ended');
+      this.node.emit(E_BgmEventType.Ended);
     }
   }
 
@@ -37,12 +60,20 @@ export class AudioPlayer extends Component {
    * - 使用之前请先初始化
    */
   init() {
-    this.node = this.node || new Node();
+    this.node = this.node || new Node('AudioPlayer');
     this._bgm = this.getComponent(Bgm) || this.addComponent(Bgm);
     this._sfx = this.getComponent(Sfx) || this.addComponent(Sfx);
     this._bgm.volume = this.bgmVolume;
     this._sfx.volume = this.sfxVolume;
+    this.node.on(AudioSource.EventType.STARTED, this._onBgmStart, this);
     this.node.on(AudioSource.EventType.ENDED, this._onBgmComplete, this);
+  }
+
+  /**
+   * 背景音乐是否正在播放
+   */
+  get isBgmPlaying() {
+    return this._bgm.playing;
   }
 
   /**
@@ -74,7 +105,7 @@ export class AudioPlayer extends Component {
    * 设置音乐开关
    */
   set bgmOn(v: boolean) {
-    this.bgmOn !== v && Stores.Advance.write(E_AdvanceSetting.bgm_on, v);
+    Stores.Advance.write(E_AdvanceSetting.bgm_on, v);
     if (v === false) this._bgm.stop();
   }
 
@@ -89,7 +120,7 @@ export class AudioPlayer extends Component {
    * 设置音效开关
    */
   set sfxOn(v: boolean) {
-    this.sfxOn !== v && Stores.Advance.write(E_AdvanceSetting.sfx_on, v);
+    Stores.Advance.write(E_AdvanceSetting.sfx_on, v);
     if (v === false) this._sfx.stop();
   }
 
@@ -104,7 +135,7 @@ export class AudioPlayer extends Component {
    * 设置音乐音量
    */
   set bgmVolume(v: number) {
-    this._bgm.volume = v = Numbers.clamp(Numbers.reserve(v, 1), 0, 1);
+    this._bgm.volume = v = Numbers.clamp(Numbers.reserve(v, 2), 0, 1);
     Stores.Advance.write(E_AdvanceSetting.bgm_volume, v);
   }
 
@@ -119,7 +150,7 @@ export class AudioPlayer extends Component {
    * 设置音效音量
    */
   set sfxVolume(v: number) {
-    this._sfx.volume = v = Numbers.clamp(Numbers.reserve(v, 1), 0, 1);
+    this._sfx.volume = v = Numbers.clamp(Numbers.reserve(v, 2), 0, 1);
     Stores.Advance.write(E_AdvanceSetting.sfx_volume, v);
   }
 

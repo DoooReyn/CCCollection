@@ -5,7 +5,7 @@
  * @LastModifiedAt: 2023-07-20 23:21:32
  */
 
-import { AudioClip, AudioSource, error } from 'cc';
+import { AudioClip, AudioSource, error, log } from 'cc';
 import { I_AssetItem } from '../cmm/interface';
 import { ResLoader } from '../res/res-loader';
 
@@ -27,11 +27,17 @@ export class Bgm extends AudioSource {
         const clip = clips[0];
 
         // 如果和之前是同一份资源，则跳过
-        if (this.clip && this.clip === clip) return;
+        if (this.clip && this.clip === clip && this.playing) {
+          log('该音乐正在播放');
+          this.node.emit('bgm-playing');
+          return;
+        }
 
         // 停止和释放前一份资源
         if (this.playing) this.stop();
-        this.release();
+        if (this.clip && this.clip !== clip) {
+          this.release();
+        }
 
         // 播放
         options.onComplete && options.onComplete(clip);
