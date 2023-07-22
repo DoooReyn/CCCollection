@@ -8,6 +8,7 @@
 import { AudioClip, AudioSource, error, log } from 'cc';
 import { I_AssetItem } from '../cmm/interface';
 import { ResLoader } from '../res/res-loader';
+import { Events } from '../event/events';
 
 /**
  * 音乐播放器
@@ -28,8 +29,7 @@ export class Bgm extends AudioSource {
 
         // 如果和之前是同一份资源，则跳过
         if (this.clip && this.clip === clip && this.playing) {
-          log('该音乐正在播放');
-          this.node.emit('bgm-playing');
+          Events.instance.audio.emit('bgm-playing');
           return;
         }
 

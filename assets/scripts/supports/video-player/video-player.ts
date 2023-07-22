@@ -22,6 +22,7 @@ import { I_AssetItem } from '../cmm/interface';
 import { Numbers } from '../cmm/numbers';
 import { RegExpValidator } from '../cmm/reg-exp-validator';
 import { ResLoader } from '../res/res-loader';
+import { Events } from '../event/events';
 
 /**
  * 视频状态
@@ -232,7 +233,7 @@ export class VideoPlayer extends Component {
       onOK: (clips) => this._loadClip(clips[0]),
       onBad: (err) => {
         this._state = E_VideoState.Primitive;
-        this.node.emit(E_VideoEventType.LoadBad, {
+        Events.instance.video.emit(E_VideoEventType.LoadBad, {
           bundle,
           path,
           reason: err.toString(),
@@ -253,7 +254,7 @@ export class VideoPlayer extends Component {
       onOK: (clip) => this._loadClip(clip),
       onBad: (err) => {
         this._state = E_VideoState.Primitive;
-        this.node.emit(E_VideoEventType.LoadBad, {
+        Events.instance.video.emit(E_VideoEventType.LoadBad, {
           url,
           reason: err.toString(),
         });
@@ -267,7 +268,6 @@ export class VideoPlayer extends Component {
    * @param clip 视频片段资源
    */
   private _loadClip(clip: VideoClip) {
-    const event = this.node;
     const video = (<any>clip)._video as HTMLVideoElement;
     video.controls = false;
     video.hidden = true;
@@ -277,10 +277,10 @@ export class VideoPlayer extends Component {
     video.addEventListener('loadeddata', () => {
       if (this.isDataLoaded) return;
       this._state = E_VideoState.Loaded;
-      event.emit(E_VideoEventType.Ready, video);
+      Events.instance.video.emit(E_VideoEventType.Ready, video);
     });
     video.addEventListener('ended', () => {
-      event.emit(E_VideoEventType.Ended);
+      Events.instance.video.emit(E_VideoEventType.Ended);
       if (this.loop) {
         this.current = 0;
         this.play();
@@ -292,20 +292,20 @@ export class VideoPlayer extends Component {
 
     this._element = video;
     this._state = E_VideoState.Loaded;
-    event.emit(E_VideoEventType.LoadOk, clip);
+    Events.instance.video.emit(E_VideoEventType.LoadOk, clip);
   }
 
   /**
    * 渲染视频帧画面
    */
   private _render() {
-    const { _ctx, _display, _canvas, _element, _width, _height, node } = this;
+    const { _ctx, _display, _canvas, _element, _width, _height } = this;
     _display.spriteFrame &&
       ResLoader.instance.releaseAsset(_display.spriteFrame);
     _ctx.clearRect(0, 0, _width, _height);
     _ctx.drawImage(_element, 0, 0, _width, _height);
     _display.spriteFrame = SpriteFrame.createWithImage(_canvas);
-    node.emit(E_VideoEventType.Step, _element.currentTime);
+    Events.instance.video.emit(E_VideoEventType.Step, _element.currentTime);
   }
 
   /**
@@ -351,7 +351,7 @@ export class VideoPlayer extends Component {
     }
 
     this._state = E_VideoState.Loading;
-    this.node.emit(E_VideoEventType.Loading, { asset });
+    Events.instance.video.emit(E_VideoEventType.Loading, { asset });
 
     if (asset instanceof VideoClip) {
       this._loadClip(asset);
@@ -399,7 +399,7 @@ export class VideoPlayer extends Component {
       this._element.muted = this.muted;
       this._element.play();
       this._state = E_VideoState.Playing;
-      this.node.emit(E_VideoEventType.Play);
+      Events.instance.video.emit(E_VideoEventType.Play);
     }
   }
 
@@ -410,7 +410,7 @@ export class VideoPlayer extends Component {
     if (this.isLoaded) {
       const to = Numbers.reserve(Numbers.clamp(timePiece, 0, this.duration), 1);
       this._element.currentTime = to;
-      this.node.emit(E_VideoEventType.Goto, to);
+      Events.instance.video.emit(E_VideoEventType.Goto, to);
       this._render();
     }
   }
@@ -422,7 +422,7 @@ export class VideoPlayer extends Component {
     if (this.isPlaying) {
       this._element.pause();
       this._state = E_VideoState.Paused;
-      this.node.emit(E_VideoEventType.Pause);
+      Events.instance.video.emit(E_VideoEventType.Pause);
     }
   }
 
@@ -433,7 +433,7 @@ export class VideoPlayer extends Component {
     if (this.isPaused) {
       this._element.play();
       this._state = E_VideoState.Playing;
-      this.node.emit(E_VideoEventType.Resume);
+      Events.instance.video.emit(E_VideoEventType.Resume);
     }
   }
 
@@ -446,7 +446,7 @@ export class VideoPlayer extends Component {
       this._element.load();
       this._render();
       this._state = E_VideoState.Loaded;
-      this.node.emit(E_VideoEventType.Stop);
+      Events.instance.video.emit(E_VideoEventType.Stop);
     }
   }
 

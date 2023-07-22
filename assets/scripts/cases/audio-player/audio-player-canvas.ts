@@ -21,6 +21,7 @@ import {
 } from '../../supports/audio-player/audio-player';
 import { E_AdvanceSetting } from '../../supports/cmm/setting';
 import { Numbers } from '../../supports/cmm/numbers';
+import { Events } from '../../supports/event/events';
 const { ccclass, property } = _decorator;
 
 /**
@@ -56,6 +57,7 @@ export class AudioPlayerCanvas extends Component {
     Device.instance.init(C_HOME_PAGE);
     Ciphers.AES.init(C_AES_KEY, C_AES_IV);
     Stores.Advance.init(C_SETTING);
+    Events.instance.init();
     AudioPlayer.instance.init();
 
     // 同步本地数据
@@ -71,13 +73,13 @@ export class AudioPlayerCanvas extends Component {
     this.toggleSfx.isChecked = sfx_on;
 
     // 监听音乐事件
-    AudioPlayer.instance.node.on(E_BgmEventType.Start, () => {
+    Events.instance.audio.on(E_BgmEventType.Start, () => {
       this._setState('背景音乐开始播放');
     });
-    AudioPlayer.instance.node.on(E_BgmEventType.Playing, () => {
+    Events.instance.audio.on(E_BgmEventType.Playing, () => {
       this._setState('当前背景音乐正在播放');
     });
-    AudioPlayer.instance.node.on(E_BgmEventType.Ended, () => {
+    Events.instance.audio.on(E_BgmEventType.Ended, () => {
       this._setState('背景音乐结束播放');
     });
   }

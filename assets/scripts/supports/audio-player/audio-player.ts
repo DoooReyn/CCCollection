@@ -12,6 +12,7 @@ import { Stores } from '../storage';
 import { E_AdvanceSetting } from '../cmm/setting';
 import { I_AssetItem } from '../cmm/interface';
 import { Numbers } from '../cmm/numbers';
+import { Events } from '../event/events';
 const { ccclass } = _decorator;
 
 /**
@@ -40,7 +41,14 @@ export class AudioPlayer extends Component {
    */
   private _onBgmStart(source: AudioSource) {
     if (source === this._bgm) {
-      this.node.emit(E_BgmEventType.Start);
+      Events.instance.audio.emit(E_BgmEventType.Start, {
+        name: this._bgm.name,
+        uuid: this._bgm.uuid,
+        loop: this._bgm.loop,
+        volume: this._bgm.volume,
+        sampleRate: this._bgm.getSampleRate(),
+        duration: this._bgm.duration,
+      });
     }
   }
 
@@ -51,7 +59,10 @@ export class AudioPlayer extends Component {
    */
   private _onBgmComplete(source: AudioSource) {
     if (source === this._bgm) {
-      this.node.emit(E_BgmEventType.Ended);
+      Events.instance.audio.emit(E_BgmEventType.Ended, {
+        name: this._bgm.name,
+        uuid: this._bgm.uuid,
+      });
     }
   }
 

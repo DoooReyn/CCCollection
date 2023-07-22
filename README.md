@@ -18,15 +18,9 @@
   - MD5
   - Base64
   - AES
-- 多种存储方案
-  - Memory
-  - LocalStorage
-  - Cookie
-  - Session
 
 ## 已完成
 
-- 支持加、解密与自定义数据模板的本地存储方案 [Advance][1]
 - 资源管理器 [ResLoader][2]
   - 支持加载进度、完成、成功、失败回调
   - 加载接口统一：
@@ -45,6 +39,13 @@
 - 音频播放器 [AudioPlayer][4]
   - 支持分别对音效和音乐操作
   - 支持开关控制、音量调节
+- 全局事件管理器 [Events][5]
+- 多种存储方案 [Stores][6]
+  - Memory
+  - LocalStorage
+  - Cookie
+  - Session
+  - 支持加、解密与自定义数据模板的本地存储方案 [Advance][1]
 
 ## 计划中
 
@@ -52,3 +53,5 @@
 [2]: ./assets/scripts/supports/res/res-loader.ts
 [3]: ./doc/video-player.md
 [4]: ./assets/scripts/supports/audio-player/audio-player.ts
+[5]: ./assets/scripts/support/event/events.ts
+[6]: ./assets/scripts/supports/storage/index.ts
