@@ -46,6 +46,7 @@
   - Cookie
   - Session
   - 支持加、解密与自定义数据模板的本地存储方案 [Advance][1]
+- 日志管理器 [Logger][7]
 
 ## 计划中
 
@@ -55,3 +56,4 @@
 [4]: ./assets/scripts/supports/audio-player/audio-player.ts
 [5]: ./assets/scripts/support/event/events.ts
 [6]: ./assets/scripts/supports/storage/index.ts
+[7]: ./assets/scripts/supports/logger/logger.ts
