@@ -1,3 +1,10 @@
+/*
+ * @Author: DoooReyn 
+ * @Date: 2023-07-24 10:38:02 
+ * @LastModifiedBy: DoooReyn 
+ * @LastModifiedAt: 2023-07-24 10:38:02 
+ */
+
 import { EventTarget, Game, Input, game, input } from 'cc';
 
 /**
@@ -14,7 +21,7 @@ class CustomEventTarget extends EventTarget {
 }
 
 /**
- * 事件目标
+ * 事件管理器
  */
 export class Events {
   public static instance: Events = new Events();

@@ -20,7 +20,6 @@ import {
   E_BgmEventType,
 } from '../../supports/audio-player/audio-player';
 import { E_AdvanceSetting } from '../../supports/cmm/setting';
-import { Numbers } from '../../supports/cmm/numbers';
 import { Events } from '../../supports/event/events';
 const { ccclass, property } = _decorator;
 

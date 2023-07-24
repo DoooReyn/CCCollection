@@ -1,8 +1,8 @@
 /*
- * @Author: DoooReyn 
- * @Date: 2023-07-18 20:32:54 
- * @LastModifiedBy: DoooReyn 
- * @LastModifiedAt: 2023-07-18 20:32:54 
+ * @Author: DoooReyn
+ * @Date: 2023-07-18 20:32:54
+ * @LastModifiedBy: DoooReyn
+ * @LastModifiedAt: 2023-07-18 20:32:54
  */
 
 /**
@@ -32,5 +32,16 @@ export namespace Numbers {
    */
   export function clamp(val: number, min: number, max: number): number {
     return mmin(max, mmax(val, min));
+  }
+
+  export function padStart(v: number, digit: number) {
+    digit = Math.max(0, digit | 0);
+    if (v < Math.pow(10, digit)) {
+      let prefix = digit - v.toString().length;
+      if (prefix > 0) {
+        return '0'.repeat(prefix) + v;
+      }
+    }
+    return v.toString();
   }
 }
