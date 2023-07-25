@@ -1,11 +1,11 @@
 /*
- * @Author: DoooReyn 
- * @Date: 2023-07-19 10:22:49 
- * @LastModifiedBy: DoooReyn 
- * @LastModifiedAt: 2023-07-19 10:22:49 
+ * @Author: DoooReyn
+ * @Date: 2023-07-19 10:22:49
+ * @LastModifiedBy: DoooReyn
+ * @LastModifiedAt: 2023-07-19 10:22:49
  */
 
-import { isValid } from 'cc';
+import { Component, Node, isValid } from 'cc';
 
 /**
  * 类型判定辅助工具
@@ -16,7 +16,7 @@ export namespace KindOf {
    * @param item 目标
    * @returns
    */
-  export function isFunction(item: any) {
+  export function isFunction(item: unknown) {
     return typeof item === 'function';
   }
 
@@ -25,7 +25,7 @@ export namespace KindOf {
    * @param item 目标
    * @returns
    */
-  export function isNumber(item: any) {
+  export function isNumber(item: unknown) {
     return typeof item === 'number' && !isNaN(item);
   }
 
@@ -34,7 +34,7 @@ export namespace KindOf {
    * @param item 目标
    * @returns
    */
-  export function isString(item: any) {
+  export function isString(item: unknown) {
     return typeof item === 'string';
   }
 
@@ -43,7 +43,7 @@ export namespace KindOf {
    * @param item 目标
    * @returns
    */
-  export function isObject(item: any) {
+  export function isObject(item: unknown) {
     return Object.prototype.toString.call(item) === '[object Object]';
   }
 
@@ -52,7 +52,7 @@ export namespace KindOf {
    * @param item 目标
    * @returns
    */
-  export function isArray(item: any) {
+  export function isArray(item: unknown) {
     return item instanceof Array;
   }
 
@@ -61,7 +61,7 @@ export namespace KindOf {
    * @param item 目标
    * @returns
    */
-  export function isBoolean(item: any) {
+  export function isBoolean(item: unknown) {
     return typeof item === 'boolean';
   }
 
@@ -70,7 +70,7 @@ export namespace KindOf {
    * @param item 目标
    * @returns
    */
-  export function isTrue(item: any) {
+  export function isTrue(item: unknown) {
     if (isBoolean(item)) {
       // 布尔值直接判定值
       return Boolean(item);
@@ -85,7 +85,7 @@ export namespace KindOf {
    * @param item 目标
    * @returns
    */
-  export function isFalse(item: any) {
+  export function isFalse(item: unknown) {
     return !isTrue(item);
   }
 
@@ -94,7 +94,7 @@ export namespace KindOf {
    * @param t 目标
    * @returns
    */
-  export function isUndefined(t: any) {
+  export function isUndefined(t: unknown) {
     return t === undefined || t === null;
   }
 
@@ -103,7 +103,7 @@ export namespace KindOf {
    * @param item 目标
    * @returns
    */
-  export function isNull(item: any) {
+  export function isNull(item: unknown) {
     return isUndefined(item) || !isValid(item);
   }
 
@@ -112,7 +112,25 @@ export namespace KindOf {
    * @param item 目标
    * @returns
    */
-  export function notNull(item: any) {
+  export function notNull(item: unknown) {
     return !isUndefined(item) && isValid(item);
+  }
+
+  /**
+   * 是否节点
+   * @param item 目标
+   * @returns
+   */
+  export function isNode(item: unknown) {
+    return item instanceof Node;
+  }
+
+  /**
+   * 是否组件
+   * @param item 目标
+   * @returns
+   */
+  export function isComponent(item: unknown) {
+    return item instanceof Component;
   }
 }

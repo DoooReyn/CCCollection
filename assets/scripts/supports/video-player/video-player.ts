@@ -23,6 +23,7 @@ import { Numbers } from '../cmm/numbers';
 import { RegExpValidator } from '../cmm/reg-exp-validator';
 import { ResLoader } from '../res/res-loader';
 import { Events } from '../event/events';
+import { Singletons } from '../singletons';
 
 /**
  * 视频状态
@@ -226,14 +227,14 @@ export class VideoPlayer extends Component {
    * @param path 视频资源路径
    */
   private _loadFromBundle(bundle: string, path: string) {
-    ResLoader.instance.loadOne({
+    Singletons.res.loadOne({
       path,
       bundle,
       type: VideoClip,
       onOK: (clips) => this._loadClip(clips[0]),
       onBad: (err) => {
         this._state = E_VideoState.Primitive;
-        Events.instance.video.emit(E_VideoEventType.LoadBad, {
+        Singletons.events.video.emit(E_VideoEventType.LoadBad, {
           bundle,
           path,
           reason: err.toString(),
@@ -248,13 +249,13 @@ export class VideoPlayer extends Component {
    * @param url 视频网址
    */
   private _loadFromRemote(url: string) {
-    ResLoader.instance.loadRemote({
+    Singletons.res.loadRemote({
       url,
       type: VideoClip,
       onOK: (clip) => this._loadClip(clip),
       onBad: (err) => {
         this._state = E_VideoState.Primitive;
-        Events.instance.video.emit(E_VideoEventType.LoadBad, {
+        Singletons.events.video.emit(E_VideoEventType.LoadBad, {
           url,
           reason: err.toString(),
         });
@@ -277,10 +278,10 @@ export class VideoPlayer extends Component {
     video.addEventListener('loadeddata', () => {
       if (this.isDataLoaded) return;
       this._state = E_VideoState.Loaded;
-      Events.instance.video.emit(E_VideoEventType.Ready, video);
+      Singletons.events.video.emit(E_VideoEventType.Ready, video);
     });
     video.addEventListener('ended', () => {
-      Events.instance.video.emit(E_VideoEventType.Ended);
+      Singletons.events.video.emit(E_VideoEventType.Ended);
       if (this.loop) {
         this.current = 0;
         this.play();
@@ -292,7 +293,7 @@ export class VideoPlayer extends Component {
 
     this._element = video;
     this._state = E_VideoState.Loaded;
-    Events.instance.video.emit(E_VideoEventType.LoadOk, clip);
+    Singletons.events.video.emit(E_VideoEventType.LoadOk, clip);
   }
 
   /**
@@ -301,11 +302,11 @@ export class VideoPlayer extends Component {
   private _render() {
     const { _ctx, _display, _canvas, _element, _width, _height } = this;
     _display.spriteFrame &&
-      ResLoader.instance.releaseAsset(_display.spriteFrame);
+    Singletons.res.releaseAsset(_display.spriteFrame);
     _ctx.clearRect(0, 0, _width, _height);
     _ctx.drawImage(_element, 0, 0, _width, _height);
     _display.spriteFrame = SpriteFrame.createWithImage(_canvas);
-    Events.instance.video.emit(E_VideoEventType.Step, _element.currentTime);
+    Singletons.events.video.emit(E_VideoEventType.Step, _element.currentTime);
   }
 
   /**
@@ -351,7 +352,7 @@ export class VideoPlayer extends Component {
     }
 
     this._state = E_VideoState.Loading;
-    Events.instance.video.emit(E_VideoEventType.Loading, { asset });
+    Singletons.events.video.emit(E_VideoEventType.Loading, { asset });
 
     if (asset instanceof VideoClip) {
       this._loadClip(asset);
@@ -377,8 +378,8 @@ export class VideoPlayer extends Component {
       this._element.remove();
       const frame = this._display.spriteFrame;
       this._display.spriteFrame = null;
-      frame && ResLoader.instance.releaseAsset(frame);
-      ResLoader.instance.releaseAsset(this._clip);
+      frame && Singletons.res.releaseAsset(frame);
+      Singletons.res.releaseAsset(this._clip);
     }
     this._canvas.remove();
     this._clip = null;
@@ -399,7 +400,7 @@ export class VideoPlayer extends Component {
       this._element.muted = this.muted;
       this._element.play();
       this._state = E_VideoState.Playing;
-      Events.instance.video.emit(E_VideoEventType.Play);
+      Singletons.events.video.emit(E_VideoEventType.Play);
     }
   }
 
@@ -410,7 +411,7 @@ export class VideoPlayer extends Component {
     if (this.isLoaded) {
       const to = Numbers.reserve(Numbers.clamp(timePiece, 0, this.duration), 1);
       this._element.currentTime = to;
-      Events.instance.video.emit(E_VideoEventType.Goto, to);
+      Singletons.events.video.emit(E_VideoEventType.Goto, to);
       this._render();
     }
   }
@@ -422,7 +423,7 @@ export class VideoPlayer extends Component {
     if (this.isPlaying) {
       this._element.pause();
       this._state = E_VideoState.Paused;
-      Events.instance.video.emit(E_VideoEventType.Pause);
+      Singletons.events.video.emit(E_VideoEventType.Pause);
     }
   }
 
@@ -433,7 +434,7 @@ export class VideoPlayer extends Component {
     if (this.isPaused) {
       this._element.play();
       this._state = E_VideoState.Playing;
-      Events.instance.video.emit(E_VideoEventType.Resume);
+      Singletons.events.video.emit(E_VideoEventType.Resume);
     }
   }
 
@@ -446,7 +447,7 @@ export class VideoPlayer extends Component {
       this._element.load();
       this._render();
       this._state = E_VideoState.Loaded;
-      Events.instance.video.emit(E_VideoEventType.Stop);
+      Singletons.events.video.emit(E_VideoEventType.Stop);
     }
   }
 

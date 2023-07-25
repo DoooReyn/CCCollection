@@ -5,14 +5,14 @@
  * @LastModifiedAt: 2023-07-18 20:36:38
  */
 
-import { _decorator, AudioSource, Component, log, Node } from 'cc';
+import { _decorator, AudioSource, Component } from 'cc';
 import { Bgm } from './bgm';
 import { Sfx } from './sfx';
 import { Stores } from '../storage';
 import { E_AdvanceSetting } from '../cmm/setting';
 import { I_AssetItem } from '../cmm/interface';
 import { Numbers } from '../cmm/numbers';
-import { Events } from '../event/events';
+import { Singletons } from '../singletons';
 const { ccclass } = _decorator;
 
 /**
@@ -41,7 +41,7 @@ export class AudioPlayer extends Component {
    */
   private _onBgmStart(source: AudioSource) {
     if (source === this._bgm) {
-      Events.instance.audio.emit(E_BgmEventType.Start, {
+      Singletons.events.audio.emit(E_BgmEventType.Start, {
         name: this._bgm.name,
         uuid: this._bgm.uuid,
         loop: this._bgm.loop,
@@ -59,7 +59,7 @@ export class AudioPlayer extends Component {
    */
   private _onBgmComplete(source: AudioSource) {
     if (source === this._bgm) {
-      Events.instance.audio.emit(E_BgmEventType.Ended, {
+      Singletons.events.audio.emit(E_BgmEventType.Ended, {
         name: this._bgm.name,
         uuid: this._bgm.uuid,
       });
@@ -71,7 +71,6 @@ export class AudioPlayer extends Component {
    * - 使用之前请先初始化
    */
   init() {
-    this.node = this.node || new Node('AudioPlayer');
     this._bgm = this.getComponent(Bgm) || this.addComponent(Bgm);
     this._sfx = this.getComponent(Sfx) || this.addComponent(Sfx);
     this._bgm.volume = this.bgmVolume;

@@ -82,8 +82,6 @@ interface I_BundleResOptions {
  * 资源管理器
  */
 export class ResLoader {
-  static readonly instance: ResLoader = new ResLoader();
-
   /**
    * 加载资源包
    * @param options 资源包加载格式

@@ -11,8 +11,6 @@
  * - 需要将 `seedrandom.min.js` 导入为插件
  */
 export class Randoms {
-  public static readonly instance: Randoms = new Randoms();
-
   /**
    * 随机数种子
    */

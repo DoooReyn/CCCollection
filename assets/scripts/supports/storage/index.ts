@@ -15,10 +15,10 @@ import { I_AdvanceSetting } from '../cmm/setting';
 /**
  * 存储工具
  */
-export const Stores = {
-  Memory: new Memory(),
-  Local: new Local(),
-  Cookie: new Cookie(),
-  Session: new Session(),
-  Advance: new Advance<I_AdvanceSetting>(),
-};
+export class Stores {
+  public static readonly Memory = new Memory();
+  public static readonly Local = new Local();
+  public static readonly Cookie = new Cookie();
+  public static readonly Session = new Session();
+  public static readonly Advance = new Advance<I_AdvanceSetting>();
+}

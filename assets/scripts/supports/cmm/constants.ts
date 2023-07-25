@@ -26,6 +26,11 @@ export const C_AES_KEY = '000102030405060708090a0b0c0d0e0f';
 export const C_AES_IV = '101112131415161718191a1b1c1d1e1f';
 
 /**
+ * 常驻节点名称
+ */
+export const C_PERSIST_ROOT = 'Root#Persistence';
+
+/**
  * 设置选项
  */
 export const C_SETTING: I_AdvanceSetting = {

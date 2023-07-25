@@ -14,7 +14,7 @@ import {
   E_VideoEventType,
 } from '../../supports/video-player/video-player';
 import { Numbers } from '../../supports/cmm/numbers';
-import { Events } from '../../supports/event/events';
+import { Singletons } from '../../supports/singletons';
 
 const { ccclass, property } = _decorator;
 
@@ -56,32 +56,32 @@ export class VideoPlayerCanvas extends Component {
   muteBtn: Toggle = null;
 
   protected onEnable(): void {
-    Events.instance.video.on(E_VideoEventType.Loading, this._onLoading, this);
-    Events.instance.video.on(E_VideoEventType.LoadBad, this._onLoadBad, this);
-    Events.instance.video.on(E_VideoEventType.LoadOk, this._onLoadOk, this);
-    Events.instance.video.on(E_VideoEventType.Ready, this._onReady, this);
-    Events.instance.video.on(E_VideoEventType.Play, this._onPlayed, this);
-    Events.instance.video.on(E_VideoEventType.Pause, this._onPaused, this);
-    Events.instance.video.on(E_VideoEventType.Resume, this._onResumed, this);
-    Events.instance.video.on(E_VideoEventType.Stop, this._onStopped, this);
-    Events.instance.video.on(E_VideoEventType.Goto, this._onGoto, this);
-    Events.instance.video.on(E_VideoEventType.Step, this._onStep, this);
-    Events.instance.video.on(E_VideoEventType.Ended, this._onEnded, this);
+    Singletons.events.video.on(E_VideoEventType.Loading, this._onLoading, this);
+    Singletons.events.video.on(E_VideoEventType.LoadBad, this._onLoadBad, this);
+    Singletons.events.video.on(E_VideoEventType.LoadOk, this._onLoadOk, this);
+    Singletons.events.video.on(E_VideoEventType.Ready, this._onReady, this);
+    Singletons.events.video.on(E_VideoEventType.Play, this._onPlayed, this);
+    Singletons.events.video.on(E_VideoEventType.Pause, this._onPaused, this);
+    Singletons.events.video.on(E_VideoEventType.Resume, this._onResumed, this);
+    Singletons.events.video.on(E_VideoEventType.Stop, this._onStopped, this);
+    Singletons.events.video.on(E_VideoEventType.Goto, this._onGoto, this);
+    Singletons.events.video.on(E_VideoEventType.Step, this._onStep, this);
+    Singletons.events.video.on(E_VideoEventType.Ended, this._onEnded, this);
     this.player.node.on(NodeEventType.TOUCH_MOVE, this._onDrag, this);
   }
 
   protected onDisable(): void {
-    Events.instance.video.off(E_VideoEventType.Loading, this._onLoading, this);
-    Events.instance.video.off(E_VideoEventType.LoadBad, this._onLoadBad, this);
-    Events.instance.video.off(E_VideoEventType.LoadOk, this._onLoadOk, this);
-    Events.instance.video.off(E_VideoEventType.Ready, this._onReady, this);
-    Events.instance.video.off(E_VideoEventType.Play, this._onPlayed, this);
-    Events.instance.video.off(E_VideoEventType.Pause, this._onPaused, this);
-    Events.instance.video.off(E_VideoEventType.Resume, this._onResumed, this);
-    Events.instance.video.off(E_VideoEventType.Stop, this._onStopped, this);
-    Events.instance.video.off(E_VideoEventType.Goto, this._onGoto, this);
-    Events.instance.video.off(E_VideoEventType.Step, this._onStep, this);
-    Events.instance.video.off(E_VideoEventType.Ended, this._onEnded, this);
+    Singletons.events.video.off(E_VideoEventType.Loading, this._onLoading, this);
+    Singletons.events.video.off(E_VideoEventType.LoadBad, this._onLoadBad, this);
+    Singletons.events.video.off(E_VideoEventType.LoadOk, this._onLoadOk, this);
+    Singletons.events.video.off(E_VideoEventType.Ready, this._onReady, this);
+    Singletons.events.video.off(E_VideoEventType.Play, this._onPlayed, this);
+    Singletons.events.video.off(E_VideoEventType.Pause, this._onPaused, this);
+    Singletons.events.video.off(E_VideoEventType.Resume, this._onResumed, this);
+    Singletons.events.video.off(E_VideoEventType.Stop, this._onStopped, this);
+    Singletons.events.video.off(E_VideoEventType.Goto, this._onGoto, this);
+    Singletons.events.video.off(E_VideoEventType.Step, this._onStep, this);
+    Singletons.events.video.off(E_VideoEventType.Ended, this._onEnded, this);
     this.player.node.off(NodeEventType.TOUCH_MOVE, this._onDrag, this);
   }
 

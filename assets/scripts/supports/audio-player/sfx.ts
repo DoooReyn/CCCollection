@@ -1,7 +1,17 @@
+/*
+ * @Author: DoooReyn 
+ * @Date: 2023-07-25 15:45:45 
+ * @LastModifiedBy: DoooReyn 
+ * @LastModifiedAt: 2023-07-25 15:45:45 
+ */
+
 import { AudioClip, AudioSource, error } from 'cc';
 import { I_AssetItem } from '../cmm/interface';
-import { ResLoader } from '../res/res-loader';
+import { Singletons } from '../singletons';
 
+/**
+ * 音效播放组件
+ */
 export class Sfx extends AudioSource {
   private _map: Map<string, AudioClip> = new Map<string, AudioClip>();
 
@@ -11,7 +21,7 @@ export class Sfx extends AudioSource {
    * @param onComplete
    */
   load(options: I_AssetItem & { onComplete?: Function }) {
-    ResLoader.instance.loadOne({
+    Singletons.res.loadOne({
       path: options.path,
       bundle: options.bundle,
       type: AudioClip,
@@ -27,7 +37,7 @@ export class Sfx extends AudioSource {
 
   release() {
     this.stop();
-    this._map.forEach.call(this, ResLoader.instance.release);
+    this._map.forEach.call(this, Singletons.res.release);
     this._map.clear();
   }
 }

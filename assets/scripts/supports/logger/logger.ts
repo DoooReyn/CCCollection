@@ -74,8 +74,6 @@ function GetStack(index: number): string {
  * 日志管理器
  */
 export class Logger {
-  static readonly instance: Logger = new Logger();
-
   /**
    * 是否开启
    */

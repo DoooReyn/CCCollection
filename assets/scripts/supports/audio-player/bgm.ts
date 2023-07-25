@@ -5,13 +5,12 @@
  * @LastModifiedAt: 2023-07-20 23:21:32
  */
 
-import { AudioClip, AudioSource, error, log } from 'cc';
+import { AudioClip, AudioSource, error } from 'cc';
 import { I_AssetItem } from '../cmm/interface';
-import { ResLoader } from '../res/res-loader';
-import { Events } from '../event/events';
+import { Singletons } from '../singletons';
 
 /**
- * 音乐播放器
+ * 音乐播放组件
  */
 export class Bgm extends AudioSource {
   /**
@@ -19,7 +18,7 @@ export class Bgm extends AudioSource {
    * @param options 选项
    */
   load(options: I_AssetItem & { loop?: boolean; onComplete?: Function }) {
-    ResLoader.instance.loadOne({
+    Singletons.res.loadOne({
       path: options.path,
       bundle: options.bundle,
       type: AudioClip,
@@ -29,7 +28,7 @@ export class Bgm extends AudioSource {
 
         // 如果和之前是同一份资源，则跳过
         if (this.clip && this.clip === clip && this.playing) {
-          Events.instance.audio.emit('bgm-playing');
+          Singletons.events.audio.emit('bgm-playing');
           return;
         }
 
@@ -54,7 +53,7 @@ export class Bgm extends AudioSource {
   release() {
     if (this.clip) {
       this.stop();
-      ResLoader.instance.releaseAsset(this.clip);
+      Singletons.res.releaseAsset(this.clip);
       this.clip = null;
     }
   }

@@ -21,6 +21,7 @@ import {
 } from '../../supports/audio-player/audio-player';
 import { E_AdvanceSetting } from '../../supports/cmm/setting';
 import { Events } from '../../supports/event/events';
+import { Singletons } from '../../supports/singletons';
 const { ccclass, property } = _decorator;
 
 /**
@@ -53,17 +54,18 @@ export class AudioPlayerCanvas extends Component {
 
   start() {
     // 初始化需要的模块
-    Device.instance.init(C_HOME_PAGE);
-    Ciphers.AES.init(C_AES_KEY, C_AES_IV);
-    Stores.Advance.init(C_SETTING);
-    Events.instance.init();
-    AudioPlayer.instance.init();
+    Singletons.init();
+    Singletons.device.init(C_HOME_PAGE);
+    Singletons.ciphers.AES.init(C_AES_KEY, C_AES_IV);
+    Singletons.stores.Advance.init(C_SETTING);
+    Singletons.events.init();
+    Singletons.audio.init();
 
     // 同步本地数据
-    const bgm_on = Stores.Advance.read(E_AdvanceSetting.bgm_on);
-    const sfx_on = Stores.Advance.read(E_AdvanceSetting.sfx_on);
-    const bgm_volume = Stores.Advance.read(E_AdvanceSetting.bgm_volume);
-    const sfx_volume = Stores.Advance.read(E_AdvanceSetting.sfx_volume);
+    const bgm_on = Singletons.stores.Advance.read(E_AdvanceSetting.bgm_on);
+    const sfx_on = Singletons.stores.Advance.read(E_AdvanceSetting.sfx_on);
+    const bgm_volume = Singletons.stores.Advance.read(E_AdvanceSetting.bgm_volume);
+    const sfx_volume = Singletons.stores.Advance.read(E_AdvanceSetting.sfx_volume);
     this.labBgmVolume.string = `${bgm_volume}`;
     this.labSfxVolume.string = `${sfx_volume}`;
     this.sliderBgm.progress = bgm_volume;
@@ -72,13 +74,13 @@ export class AudioPlayerCanvas extends Component {
     this.toggleSfx.isChecked = sfx_on;
 
     // 监听音乐事件
-    Events.instance.audio.on(E_BgmEventType.Start, () => {
+    Singletons.events.audio.on(E_BgmEventType.Start, () => {
       this._setState('背景音乐开始播放');
     });
-    Events.instance.audio.on(E_BgmEventType.Playing, () => {
+    Singletons.events.audio.on(E_BgmEventType.Playing, () => {
       this._setState('当前背景音乐正在播放');
     });
-    Events.instance.audio.on(E_BgmEventType.Ended, () => {
+    Singletons.events.audio.on(E_BgmEventType.Ended, () => {
       this._setState('背景音乐结束播放');
     });
   }
@@ -92,38 +94,38 @@ export class AudioPlayerCanvas extends Component {
   }
 
   onToggleBgmChecked() {
-    const on = (AudioPlayer.instance.bgmOn = !this.toggleBgm.isChecked);
-    Stores.Advance.save();
+    const on = (Singletons.audio.bgmOn = !this.toggleBgm.isChecked);
+    Singletons.stores.Advance.save();
     this._setState(`音乐 ${on ? '开' : '关'}`);
   }
 
   onToggleSfxChecked() {
-    const on = (AudioPlayer.instance.sfxOn = !this.toggleSfx.isChecked);
-    Stores.Advance.save();
+    const on = (Singletons.audio.sfxOn = !this.toggleSfx.isChecked);
+    Singletons.stores.Advance.save();
     this._setState(`音效 ${on ? '开' : '关'}`);
   }
 
   onSliderBgmChanged() {
-    AudioPlayer.instance.bgmVolume = this.sliderBgm.progress;
-    this.labBgmVolume.string = AudioPlayer.instance.bgmVolume.toString();
-    Stores.Advance.save();
+    Singletons.audio.bgmVolume = this.sliderBgm.progress;
+    this.labBgmVolume.string = Singletons.audio.bgmVolume.toString();
+    Singletons.stores.Advance.save();
   }
 
   onSliderSfxChanged() {
-    AudioPlayer.instance.sfxVolume = this.sliderSfx.progress;
-    this.labSfxVolume.string = AudioPlayer.instance.sfxVolume.toString();
-    Stores.Advance.save();
+    Singletons.audio.sfxVolume = this.sliderSfx.progress;
+    this.labSfxVolume.string = Singletons.audio.sfxVolume.toString();
+    Singletons.stores.Advance.save();
   }
 
   onPlayBgm() {
-    AudioPlayer.instance.playBgm({ path: 'bgm-lobby', loop: false });
+    Singletons.audio.playBgm({ path: 'bgm-lobby', loop: false });
   }
 
   onPlaySfx() {
-    AudioPlayer.instance.playSfx({ path: 'sfx-click' });
+    Singletons.audio.playSfx({ path: 'sfx-click' });
   }
 
   onStopAll() {
-    AudioPlayer.instance.stopAll();
+    Singletons.audio.stopAll();
   }
 }

@@ -10,6 +10,7 @@ import { Ciphers } from '../cipher/ciphers';
 import { Device } from '../device/device';
 import { Objects } from '../cmm/objects';
 import { I_BaseCipher } from '../cipher/cipher-base';
+import { Singletons } from '../singletons';
 
 /**
  * 高级存储数据模板
@@ -73,7 +74,7 @@ export class Advance<P extends I_AdvancePreset> {
     if (this._inited) throw new Error('Advance-storage initialized.');
 
     this._inited = true;
-    this._key = Device.instance.uuid;
+    this._key = Singletons.device.uuid;
     this._cipher = cipher;
     this._preset = Object.assign(Object.create(null), preset);
     this._parse();

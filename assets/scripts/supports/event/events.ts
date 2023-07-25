@@ -24,7 +24,6 @@ class CustomEventTarget extends EventTarget {
  * 事件管理器
  */
 export class Events {
-  public static instance: Events = new Events();
   /**
    * 用户自定义
    */

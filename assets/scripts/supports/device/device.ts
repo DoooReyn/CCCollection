@@ -83,8 +83,6 @@ function isHDR(): boolean {
  * 设备信息工具
  */
 export class Device {
-  static readonly instance: Device = new Device();
-
   /**
    * 是否已初始化
    */
