@@ -6,7 +6,6 @@
  */
 
 import { Singletons } from '../singletons';
-import { Randoms } from './random';
 
 /**
  * 数组辅助工具

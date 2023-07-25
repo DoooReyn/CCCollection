@@ -5,11 +5,9 @@
  * @LastModifiedAt: 2023-07-25 15:53:36 
  */
 
-import { director, Node } from 'cc';
 import { KindOf } from '../cmm/kindof';
 import { SingletonBase } from '../singleton-base';
 import { Timer, T_TimerInfo } from './timer';
-import { TimerHook } from './timer-hook';
 import { Singletons } from '../singletons';
 
 /**

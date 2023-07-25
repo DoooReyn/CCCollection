@@ -7,7 +7,6 @@
 
 import { sys } from 'cc';
 import { Ciphers } from '../cipher/ciphers';
-import { Device } from '../device/device';
 import { Objects } from '../cmm/objects';
 import { I_BaseCipher } from '../cipher/cipher-base';
 import { Singletons } from '../singletons';

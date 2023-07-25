@@ -21,8 +21,6 @@ import {
 import { I_AssetItem } from '../cmm/interface';
 import { Numbers } from '../cmm/numbers';
 import { RegExpValidator } from '../cmm/reg-exp-validator';
-import { ResLoader } from '../res/res-loader';
-import { Events } from '../event/events';
 import { Singletons } from '../singletons';
 
 /**

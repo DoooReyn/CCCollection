@@ -33,9 +33,10 @@
 
 - 加密/解密工具 (MD5/Base64/AES) [Ciphers][11]
 
+- 定时器 [Timers][12]
+
 ## 计划中
 
-- 定时器
 
 [1]: ./assets/scripts/supports/storage/advance.ts
 [2]: ./assets/scripts/supports/res/res-loader.ts
@@ -48,3 +49,4 @@
 [9]: ./assets/scripts/supports/device/device.ts
 [10]: ./assets/scripts/supports/device/uuid.ts
 [11]: ./assets/scripts/supports/cipher/ciphers.ts
+[12]: ./assets/scripts/supports/timer/timers.ts

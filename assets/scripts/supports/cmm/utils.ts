@@ -5,8 +5,7 @@
  * @LastModifiedAt: 2023-07-25 11:40:25
  */
 
-import { Component, Constructor, Node, __private } from 'cc';
-import { KindOf } from './kindof';
+import { Component, Node, __private } from 'cc';
 
 /**
  * 通用辅助工具

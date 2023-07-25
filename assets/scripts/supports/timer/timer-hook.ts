@@ -1,3 +1,10 @@
+/*
+ * @Author: DoooReyn 
+ * @Date: 2023-07-25 16:38:09 
+ * @LastModifiedBy: DoooReyn 
+ * @LastModifiedAt: 2023-07-25 16:38:09 
+ */
+
 import { _decorator, game, Game } from 'cc';
 import { Gossip } from '../cmm/gossip';
 const { ccclass } = _decorator;
